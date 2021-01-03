@@ -39,8 +39,7 @@ INSERT INTO department (name) VALUES ("HR"),("SALES"),("IT"),("Management");
 INSERT INTO role (title, salary, department_id) VALUES ("Salesman", 100000, 2),("HR Manager", 90000, 4),("HR assistant", 75000, 1);
 INSERT INTO role ( title, salary , department_id) VALUES("HR Coordinator", 40000, 1);
 SELECT * FROM role LEFT JOIN department ON role.department_id = department.id;
-SELECT * FROM department RIGHT JOIN role ON role.department_id = department.id;
-SELECT * FROM department FULL JOIN role ON role.department_id = department.id;
+
 
 
 
