@@ -2,6 +2,7 @@ const mysql = require("mysql");
 const inquirer = require("inquirer");
 const cTable = require("console.table");
 const { count } = require("console");
+const { stringify } = require("querystring");
 
 var connection = mysql.createConnection({
     host: "localhost",
@@ -10,9 +11,9 @@ var connection = mysql.createConnection({
 
     user: "root",
 
-    password: "",
+    password: "Mfcwa04rsxtypes",
 
-    database: "emsDataBase"
+    database: "emsdatabase"
 });
 
 // Starts the app
@@ -48,7 +49,9 @@ function runStart() {
                 "Delete Departments",
                 "Delete Roles",
                 "Delete Employees",
-                "View Total Budget Of A Department"
+                "View Total Budget Of A Department",
+                "Exit"
+
             ]
         })
         .then((answer) => {
@@ -118,8 +121,86 @@ function runStart() {
                     console.log("You Chose " + answer.action);
                     viewTotalBudgetOfADepartment();
                     break;
+
+                case "Exit":
+                    console.log("You Chose " + answer.action);
+                    process.exit();
+                    
             }
         })
+}
+
+// ======View Functions======
+
+function viewDepartments() {
+    connection.query("SELECT * FROM department", (err , res) => {
+        if(err) throw err;
+        console.table(res);
+        runStart();
+    });
+    
+
+}
+function viewRoles() {
+    connection.query("SELECT * FROM role", (err , res) => {
+        if(err) throw err;
+        console.table(res);
+        runStart();
+    });
+    
+
+}
+function viewEmployees() {
+    connection.query("SELECT * FROM employee", (err , res) => {
+        if(err) throw err;
+        console.table(res);
+        runStart();
+    });
+    
+
+}
+
+// ======Add Functions======
+
+function addRoles() {
+    connection.query("SELECT * FROM department", (err , res) => {
+        if(err) throw err;
+        
+
+    inquirer
+        .prompt ([{
+            name: "newRole",
+            type: "input",
+            message: "What Role Would You Like To Add? Type 'Exit' To Return To The Home Screen", 
+
+        },
+        {
+            name: "departmentRole",
+            type: "list",
+            choices: res,
+            message: "What Department Would You Like To Add This Role To?"
+
+        }
+    ])
+        .then((answer) => {
+            
+            switch (answer.newRole.toLowerCase()) {
+                case "exit":
+                    console.log("You Chose " + answer.newRole);
+                    runStart();
+                
+                default: 
+                console.log("You Chose " + answer.newRole);
+                console.log(answer.departmentRole);
+                // connection.query(`INSERT INTO department (name) VALUES ("${answer.newRole}")`, 
+                //      function(err, res) {
+                //         if (err) throw err;
+                //         console.log(res.affectedRows + " Department inserted!\n");
+                //         // Call updateProduct AFTER the INSERT completes
+                        runStart();
+                }    
+        });
+    })
 }
 
 function addDepartment() {
@@ -127,16 +208,29 @@ function addDepartment() {
         .prompt ({
             name: "newDepartment",
             type: "input",
-            message: "What Would You Like To Name Your New Department?",
+            message: "What Would You Like To Name Your New Department? Type 'Exit' To Return To The Home Screen", 
 
         })
         .then((answer) => {
             
-            switch (answer.newDepartment) {
-                case "Add Departments":
+            switch (answer.newDepartment.toLowerCase()) {
+                case "exit":
                     console.log("You Chose " + answer.newDepartment);
-                    
-                    break;
-            }
-})
-}
+                    runStart();
+                
+                default: 
+                console.log("You Chose " + answer.newDepartment);
+                connection.query(`INSERT INTO department (name) VALUES ("${answer.newDepartment}")`, 
+                     function(err, res) {
+                        if (err) throw err;
+                        console.log(res.affectedRows + " Department inserted!\n");
+                        // Call updateProduct AFTER the INSERT completes
+                        runStart();
+                }    
+            );
+
+        }
+                
+    })
+        
+};
