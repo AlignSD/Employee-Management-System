@@ -11,7 +11,7 @@ var connection = mysql.createConnection({
 
     user: "root",
 
-    password: "",
+    password: "Mfcwa04rsxtypes",
 
     database: "emsdatabase"
 });
@@ -130,38 +130,7 @@ function runStart() {
         })
 }
 
-function addDepartment() {
-    inquirer
-        .prompt ({
-            name: "newDepartment",
-            type: "input",
-            message: "What Would You Like To Name Your New Department? Type 'Exit' To Return To The Home Screen", 
-
-        })
-        .then((answer) => {
-            
-            switch (answer.newDepartment.toLowerCase()) {
-                case "exit":
-                    console.log("You Chose " + answer.newDepartment);
-                    runStart();
-                
-                default: 
-                console.log("You Chose " + answer.newDepartment);
-                connection.query(`INSERT INTO department (name) VALUES ("${answer.newDepartment}")`, 
-                     function(err, res) {
-                        if (err) throw err;
-                        console.log(res.affectedRows + " Department inserted!\n");
-                        // Call updateProduct AFTER the INSERT completes
-                        runStart();
-                }    
-            );
-
-        }
-                
-    })
-        
-};
-
+// ======View Functions======
 
 function viewDepartments() {
     connection.query("SELECT * FROM department", (err , res) => {
@@ -172,6 +141,26 @@ function viewDepartments() {
     
 
 }
+function viewRoles() {
+    connection.query("SELECT * FROM role", (err , res) => {
+        if(err) throw err;
+        console.table(res);
+        runStart();
+    });
+    
+
+}
+function viewEmployees() {
+    connection.query("SELECT * FROM employee", (err , res) => {
+        if(err) throw err;
+        console.table(res);
+        runStart();
+    });
+    
+
+}
+
+// ======Add Functions======
 
 function addRoles() {
     connection.query("SELECT * FROM department", (err , res) => {
@@ -213,3 +202,35 @@ function addRoles() {
         });
     })
 }
+
+function addDepartment() {
+    inquirer
+        .prompt ({
+            name: "newDepartment",
+            type: "input",
+            message: "What Would You Like To Name Your New Department? Type 'Exit' To Return To The Home Screen", 
+
+        })
+        .then((answer) => {
+            
+            switch (answer.newDepartment.toLowerCase()) {
+                case "exit":
+                    console.log("You Chose " + answer.newDepartment);
+                    runStart();
+                
+                default: 
+                console.log("You Chose " + answer.newDepartment);
+                connection.query(`INSERT INTO department (name) VALUES ("${answer.newDepartment}")`, 
+                     function(err, res) {
+                        if (err) throw err;
+                        console.log(res.affectedRows + " Department inserted!\n");
+                        // Call updateProduct AFTER the INSERT completes
+                        runStart();
+                }    
+            );
+
+        }
+                
+    })
+        
+};
