@@ -1,7 +1,7 @@
 # Employee-Management-System
 A Employee-Management-System to allows users to interface with a terminal, make and edit employees information and help keep track of your workplace.
 
-![Portforlio screen shot](/public/assets/en-script-ss.png)
+![Portforlio screen shot](/Employee_Management_System_Hi_Fidelity.gif)
 
 
 ## Table of Contents
